@@ -14,7 +14,7 @@ class App extends Component {
         <div>
           <nav className="navbar navbar-expand navbar-dark bg-dark">
             <a href="/tutorials" className="navbar-brand">
-              bezKoder
+              React frontend
             </a>
             <div className="navbar-nav mr-auto">
               <li className="nav-item">
@@ -32,7 +32,11 @@ class App extends Component {
 
           <div className="container mt-3">
             <Switch>
-              <Route exact path={["/", "/tutorials"]} component={TutorialsList} />
+              <Route
+                exact
+                path={["/", "/tutorials"]}
+                component={TutorialsList}
+              />
               <Route exact path="/add" component={AddTutorial} />
               <Route path="/tutorials/:id" component={Tutorial} />
             </Switch>
