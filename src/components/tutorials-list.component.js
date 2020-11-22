@@ -12,7 +12,7 @@ export default class TutorialsList extends Component {
     this.removeAllTutorials = this.removeAllTutorials.bind(this);
     this.searchTitle = this.searchTitle.bind(this);
 
-    this.state = {
+    this.state = { // state variable
       tutorials: [],
       currentTutorial: null,
       currentIndex: -1,
@@ -34,7 +34,7 @@ export default class TutorialsList extends Component {
 
   retrieveTutorials() {
     TutorialDataService.getAll()
-      .then(response => {
+      .then(response => { //this is the response from web server
         this.setState({
           tutorials: response.data
         });

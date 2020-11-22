@@ -37,7 +37,7 @@ export default class AddTutorial extends Component {
       description: this.state.description
     };
 
-    TutorialDataService.create(data)
+    TutorialDataService.create(data) // http POST request
       .then(response => {
         this.setState({
           id: response.data.id,
