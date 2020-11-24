@@ -4,6 +4,12 @@
   margin: auto;
 }
 
+.customers-list {
+  max-width: 1100px;
+  text-align: left;
+  margin: 10px;
+}
+
 .submit-form {
   max-width: 300px;
   margin: auto;

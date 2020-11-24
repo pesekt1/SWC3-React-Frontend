@@ -6,6 +6,7 @@ import "./App.css";
 import AddTutorial from "./components/add-tutorial.component";
 import Tutorial from "./components/tutorial.component";
 import TutorialsList from "./components/tutorials-list.component";
+import CustomersList from "./components/customers/customers-list.component";
 
 class App extends Component {
   render() {
@@ -29,10 +30,16 @@ class App extends Component {
                   Add
                 </Link>
               </li>
+              <li className="nav-item">
+                <Link to={"/customers"} className="nav-link">
+                  Customers
+                </Link>
+              </li>
             </div>
           </nav>
 
-          <div className="container mt-3">
+          {/* className="container mt-3" */}
+          <div className="container-expand mt-3">
             <Switch>
               <Route
                 exact
@@ -41,6 +48,7 @@ class App extends Component {
               />
               <Route exact path="/add" component={AddTutorial} />
               <Route path="/tutorials/:id" component={Tutorial} />
+              <Route path="/customers/" component={CustomersList} />
             </Switch>
           </div>
         </div>
