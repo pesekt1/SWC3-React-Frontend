@@ -148,7 +148,7 @@ export default class TutorialsList extends Component {
               <div>
                 <label>
                   <strong>Description:</strong>
-                </label>{" "}
+                </label>{"    "}
                 {currentTutorial.description}
               </div>
               <div>
