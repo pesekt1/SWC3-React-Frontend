@@ -9,10 +9,12 @@ import TutorialsList from "./components/tutorials-list.component";
 
 class App extends Component {
   render() {
+    console.log(process.env.REACT_APP_NAME);
     return (
       <Router>
         <div>
           <nav className="navbar navbar-expand navbar-dark bg-dark">
+            {/* this will reload the whole page */}
             <a href="/tutorials" className="navbar-brand">
               React frontend
             </a>
