@@ -38,6 +38,7 @@ export default class TutorialsList extends Component {
   }
 
   retrieveTutorials(currentPage) {
+    console.log(http.authHeader());
     http
       .get("/tutorials?page=" + currentPage, {
         headers: http.authHeader(),

@@ -5,8 +5,6 @@ import http from "../services/httpService";
 
 class AuthService {
   login(username, password) {
-    //return axios
-    //.post(API_URL + "signin", {
     return http
       .post("auth/signin", {
         username,
