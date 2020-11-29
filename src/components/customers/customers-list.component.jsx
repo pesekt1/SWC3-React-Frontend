@@ -10,11 +10,11 @@ export default class CustomersList extends Component {
     this.setActiveCustomer = this.setActiveCustomer.bind(this);
     this.removeCustomer = this.removeCustomer.bind(this);
 
-    this.state = { // state variable
+    this.state = {
+      // state variable
       customers: [],
       currentCustomer: null,
       currentIndex: -1,
-      searchTitle: ""
     };
   }
 
@@ -23,14 +23,16 @@ export default class CustomersList extends Component {
   }
 
   retrieveCustomers() {
-    http.get("/customers")
-      .then(response => { //this is the response from web server
+    http
+      .get("/customers", { headers: http.authHeader() })
+      .then((response) => {
+        //this is the response from web server
         this.setState({
-          customers: response.data
+          customers: response.data,
         });
         console.log(this.state.customers); //print in console, just for testing
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
       });
   }
@@ -39,38 +41,39 @@ export default class CustomersList extends Component {
     this.retrieveCustomers();
     this.setState({
       currentCustomer: null,
-      currentIndex: -1
+      currentIndex: -1,
     });
   }
 
   setActiveCustomer(customer, index) {
     this.setState({
       currentCustomer: customer,
-      currentIndex: index
+      currentIndex: index,
     });
   }
 
   removeCustomer(id) {
-    http.delete("/customers/" + id)
-      .then(response => {
+    http
+      .delete("/customers/" + id)
+      .then((response) => {
         console.log(response.data);
         this.refreshList();
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
       });
   }
 
   render() {
-    const {customers, currentCustomer} = this.state;
+    const { customers, currentCustomer } = this.state;
 
     return (
-      <div className = "customers-list row">
+      <div className="customers-list row">
         <div className="col-md-10">
           <h4>Customers List</h4>
 
-          <table className = "table table-bordered table-hover">
-            <thead className = "thead-dark">
+          <table className="table table-bordered table-hover">
+            <thead className="thead-dark">
               <tr>
                 <th>Name</th>
                 <th>Phone</th>
@@ -82,7 +85,6 @@ export default class CustomersList extends Component {
               </tr>
             </thead>
             <tbody>
-
               {customers &&
                 customers.map((customer, index) => (
                   <tr
@@ -100,7 +102,6 @@ export default class CustomersList extends Component {
                 ))}
             </tbody>
           </table>
-          
         </div>
         <div className="col-md-2">
           {currentCustomer ? (
@@ -115,7 +116,8 @@ export default class CustomersList extends Component {
               <div>
                 <label>
                   <strong>phone:</strong>
-                </label>{"    "}
+                </label>
+                {"    "}
                 {currentCustomer.phone}
               </div>
               <div>

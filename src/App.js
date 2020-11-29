@@ -3,13 +3,45 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 
-import AddTutorial from "./components/add-tutorial.component";
-import Tutorial from "./components/tutorial.component";
-import TutorialsList from "./components/tutorials-list.component";
+import AddTutorial from "./components/tutorials/add-tutorial.component";
+import Tutorial from "./components/tutorials/tutorial.component";
+import TutorialsList from "./components/tutorials/tutorials-list.component";
 import CustomersList from "./components/customers/customers-list.component";
+import Login from "./components/security/login.component";
+import Register from "./components/security/register.component";
+import AuthService from "./services/auth.service";
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.logOut = this.logOut.bind(this);
+
+    this.state = {
+      showModeratorBoard: false,
+      showAdminBoard: false,
+      currentUser: undefined,
+    };
+  }
+
+  componentDidMount() {
+    const user = AuthService.getCurrentUser();
+
+    if (user) {
+      this.setState({
+        currentUser: user,
+        showModeratorBoard: user.roles.includes("ROLE_MODERATOR"),
+        showAdminBoard: user.roles.includes("ROLE_ADMIN"),
+      });
+    }
+  }
+
+  logOut() {
+    AuthService.logout();
+  }
+
   render() {
+    const { currentUser, showModeratorBoard, showAdminBoard } = this.state;
+
     console.log(process.env.REACT_APP_NAME);
     return (
       <Router>
@@ -36,6 +68,34 @@ class App extends Component {
                 </Link>
               </li>
             </div>
+            {currentUser ? (
+              <div className="navbar-nav ml-auto">
+                <li className="nav-item">
+                  <Link to={"/profile"} className="nav-link">
+                    {currentUser.username}
+                  </Link>
+                </li>
+                <li className="nav-item">
+                  <a href="/login" className="nav-link" onClick={this.logOut}>
+                    LogOut
+                  </a>
+                </li>
+              </div>
+            ) : (
+              <div className="navbar-nav ml-auto">
+                <li className="nav-item">
+                  <Link to={"/login"} className="nav-link">
+                    Login
+                  </Link>
+                </li>
+
+                <li className="nav-item">
+                  <Link to={"/register"} className="nav-link">
+                    Sign Up
+                  </Link>
+                </li>
+              </div>
+            )}
           </nav>
 
           {/* className="container mt-3" */}
@@ -48,7 +108,9 @@ class App extends Component {
               />
               <Route exact path="/add" component={AddTutorial} />
               <Route path="/tutorials/:id" component={Tutorial} />
-              <Route path="/customers/" component={CustomersList} />
+              <Route path="/customers" component={CustomersList} />
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/register" component={Register} />
             </Switch>
           </div>
         </div>

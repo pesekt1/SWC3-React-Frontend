@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import TutorialDataService from "../services/tutorial.service";
+//import TutorialDataService from "../../services/tutorial.service";
+import http from "../../services/httpService";
 
 export default class Tutorial extends Component {
   constructor(props) {
@@ -16,9 +17,9 @@ export default class Tutorial extends Component {
         id: null,
         title: "",
         description: "",
-        published: false
+        published: false,
       },
-      message: ""
+      message: "",
     };
   }
 
@@ -29,36 +30,38 @@ export default class Tutorial extends Component {
   onChangeTitle(e) {
     const title = e.target.value;
 
-    this.setState(function(prevState) {
+    this.setState(function (prevState) {
       return {
         currentTutorial: {
           ...prevState.currentTutorial,
-          title: title
-        }
+          title: title,
+        },
       };
     });
   }
 
   onChangeDescription(e) {
     const description = e.target.value;
-    
-    this.setState(prevState => ({
+
+    this.setState((prevState) => ({
       currentTutorial: {
         ...prevState.currentTutorial,
-        description: description
-      }
+        description: description,
+      },
     }));
   }
 
   getTutorial(id) {
-    TutorialDataService.get(id)
-      .then(response => {
+    //http.get("/tutorials/" + id, { headers: http.authHeader() });
+    http
+      .get("/tutorials/" + id, { headers: http.authHeader() })
+      .then((response) => {
         this.setState({
-          currentTutorial: response.data
+          currentTutorial: response.data,
         });
         console.log(response.data);
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
       });
   }
@@ -68,47 +71,55 @@ export default class Tutorial extends Component {
       id: this.state.currentTutorial.id,
       title: this.state.currentTutorial.title,
       description: this.state.currentTutorial.description,
-      published: status
+      published: status,
     };
 
-    TutorialDataService.update(this.state.currentTutorial.id, data)
-      .then(response => {
-        this.setState(prevState => ({
+    http
+      .put("/tutorials/" + this.state.currentTutorial.id, data, {
+        headers: http.authHeader(),
+      })
+      .then((response) => {
+        this.setState((prevState) => ({
           currentTutorial: {
             ...prevState.currentTutorial,
-            published: status
-          }
+            published: status,
+          },
         }));
         console.log(response.data);
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
       });
   }
 
   updateTutorial() {
-    TutorialDataService.update(
-      this.state.currentTutorial.id,
-      this.state.currentTutorial
-    )
-      .then(response => {
+    http
+      .put(
+        "/tutorials/" + this.state.currentTutorial.id,
+        this.state.currentTutorial,
+        { headers: http.authHeader() }
+      )
+      .then((response) => {
         console.log(response.data);
         this.setState({
-          message: "The tutorial was updated successfully!"
+          message: "The tutorial was updated successfully!",
         });
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
       });
   }
 
-  deleteTutorial() {    
-    TutorialDataService.delete(this.state.currentTutorial.id)
-      .then(response => {
-        console.log(response.data);
-        this.props.history.push('/tutorials')
+  deleteTutorial() {
+    http
+      .delete("/tutorials/" + this.state.currentTutorial.id, {
+        headers: http.authHeader(),
       })
-      .catch(e => {
+      .then((response) => {
+        console.log(response.data);
+        this.props.history.push("/tutorials");
+      })
+      .catch((e) => {
         console.log(e);
       });
   }

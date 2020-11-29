@@ -1,8 +1,9 @@
 import http from "../http-common";
+import authHeader from "./auth-header";
 
 class TutorialDataService {
   getAll() {
-    return http.get("/tutorials");
+    return http.get("/tutorials", { headers: authHeader() });
   }
 
   get(id) {

@@ -1,16 +1,12 @@
 import axios from "axios";
 import { toast } from "react-toastify";
-
-export function setJwt(jwt) {
-  //if user is not logged in then this header will be undefined
-  axios.defaults.headers.common["x-auth-token"] = jwt;
-}
+import authHeader from "./auth-header";
 
 //set default baseURL so when we use http request this will be add in front
 //example: http.get("/users") will be http.get("http://localhost:3900/api/users") in development env
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
-axios.interceptors.response.use(null, error => {
+axios.interceptors.response.use(null, (error) => {
   console.log("interceptor called");
   const expectedError =
     error.response &&
@@ -29,5 +25,5 @@ export default {
   delete: axios.delete,
   post: axios.post,
   put: axios.put,
-  setJwt
+  authHeader,
 };

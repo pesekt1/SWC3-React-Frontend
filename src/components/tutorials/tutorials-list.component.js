@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import TutorialDataService from "../services/tutorial.service";
+//import TutorialDataService from "../../services/tutorial.service";
+import http from "../../services/httpService";
 import { Link } from "react-router-dom";
 
 export default class TutorialsList extends Component {
@@ -11,81 +12,105 @@ export default class TutorialsList extends Component {
     this.setActiveTutorial = this.setActiveTutorial.bind(this);
     this.removeAllTutorials = this.removeAllTutorials.bind(this);
     this.searchTitle = this.searchTitle.bind(this);
+    this.setPage = this.setPage.bind(this);
 
-    this.state = { // state variable
+    this.state = {
+      // state variable
       tutorials: [],
       currentTutorial: null,
       currentIndex: -1,
-      searchTitle: ""
+      searchTitle: "",
+      currentPage: 0,
+      totalPages: 0,
     };
   }
 
   componentDidMount() {
-    this.retrieveTutorials();
+    this.retrieveTutorials(this.state.currentPage);
   }
 
   onChangeSearchTitle(e) {
     const searchTitle = e.target.value;
 
     this.setState({
-      searchTitle: searchTitle
+      searchTitle: searchTitle,
     });
   }
 
-  retrieveTutorials() {
-    TutorialDataService.getAll()
-      .then(response => { //this is the response from web server
+  retrieveTutorials(currentPage) {
+    http
+      .get("/tutorials?page=" + currentPage, {
+        headers: http.authHeader(),
+      })
+      .then((response) => {
+        //this is the response from web server
         this.setState({
-          tutorials: response.data
+          tutorials: response.data.tutorials,
+          currentPage: response.data.currentPage,
+          totalPages: response.data.totalPages,
         });
         console.log(response.data); //print in console, just for testing
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
       });
   }
 
   refreshList() {
-    this.retrieveTutorials();
+    this.retrieveTutorials(this.state.currentPage);
     this.setState({
       currentTutorial: null,
-      currentIndex: -1
+      currentIndex: -1,
     });
   }
 
   setActiveTutorial(tutorial, index) {
     this.setState({
       currentTutorial: tutorial,
-      currentIndex: index
+      currentIndex: index,
     });
   }
 
   removeAllTutorials() {
-    TutorialDataService.deleteAll()
-      .then(response => {
+    http
+      .delete("/tutorials", { headers: http.authHeader() })
+      .then((response) => {
         console.log(response.data);
         this.refreshList();
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
       });
   }
 
   searchTitle() {
-    TutorialDataService.findByTitle(this.state.searchTitle)
-      .then(response => {
+    http
+      .get("/tutorials?title=" + this.state.searchTitle, {
+        headers: http.authHeader(),
+      })
+      .then((response) => {
         this.setState({
-          tutorials: response.data
+          tutorials: response.data.tutorials,
         });
         console.log(response.data);
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
       });
   }
 
+  setPage(increment) {
+    this.retrieveTutorials(this.state.currentPage + increment);
+    this.setState({ currentPage: this.state.currentPage + increment });
+  }
+
   render() {
-    const { searchTitle, tutorials, currentTutorial, currentIndex } = this.state;
+    const {
+      searchTitle,
+      tutorials,
+      currentTutorial,
+      currentIndex,
+    } = this.state;
 
     return (
       <div className="list row">
@@ -106,6 +131,31 @@ export default class TutorialsList extends Component {
               >
                 Search
               </button>
+              {this.state.currentPage < this.state.totalPages - 1 ? (
+                <button
+                  className="btn btn-outline-secondary"
+                  type="button"
+                  onClick={() => this.setPage(1)}
+                >
+                  Next
+                  {/* {this.state.currentPage === this.state.totalPages - 1
+                  ? "Previous"
+                  : "Next"} */}
+                </button>
+              ) : (
+                ""
+              )}
+              {this.state.currentPage === 0 ? (
+                ""
+              ) : (
+                <button
+                  className="btn btn-outline-secondary"
+                  type="button"
+                  onClick={() => this.setPage(-1)}
+                >
+                  Previous
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -148,7 +198,8 @@ export default class TutorialsList extends Component {
               <div>
                 <label>
                   <strong>Description:</strong>
-                </label>{"    "}
+                </label>
+                {"    "}
                 {currentTutorial.description}
               </div>
               <div>
