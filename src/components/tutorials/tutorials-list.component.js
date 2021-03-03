@@ -35,10 +35,13 @@ export default class TutorialsList extends Component {
     this.setState({
       searchTitle: searchTitle,
     });
+    // console.log(this.state.searchTitle);
+    // this.searchTitle();
   }
 
   retrieveTutorials(currentPage) {
     console.log(http.authHeader());
+    //axios.get("http://localhost:5557/api/tutorials?...")
     http
       .get("/tutorials?page=" + currentPage, {
         headers: http.authHeader(),
@@ -102,7 +105,11 @@ export default class TutorialsList extends Component {
 
   setPage(increment) {
     this.retrieveTutorials(this.state.currentPage + increment);
-    this.setState({ currentPage: this.state.currentPage + increment });
+    this.setState({
+      currentPage: this.state.currentPage + increment,
+      currentIndex: -1,
+      currentTutorial: null,
+    });
   }
 
   render() {
@@ -181,7 +188,7 @@ export default class TutorialsList extends Component {
 
           <button
             className="m-3 btn btn-sm btn-danger"
-            onClick={this.removeAllTutorials}
+            onClick={() => this.removeAllTutorials}
           >
             Remove All
           </button>
