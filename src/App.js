@@ -41,12 +41,12 @@ class App extends Component {
 
   //the link will be accessible only for user with ADMIN role.
   _onClick = (e) => {
-    console.log(this.state.currentUser);
-    if (!this.state.currentUser) {
-      e.preventDefault();
-    } else if (!this.state.currentUser.roles.includes("ROLE_ADMIN")) {
-      e.preventDefault();
-    }
+    // console.log(this.state.currentUser);
+    // if (!this.state.currentUser) {
+    //   e.preventDefault();
+    // } else if (!this.state.currentUser.roles.includes("ROLE_ADMIN")) {
+    //   e.preventDefault();
+    // }
   };
 
   render() {

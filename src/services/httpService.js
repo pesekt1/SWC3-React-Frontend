@@ -8,6 +8,7 @@ axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 axios.interceptors.response.use(null, (error) => {
   console.log("interceptor called");
+  console.log(error.response.data);
   const expectedError =
     error.response &&
     error.response.status >= 400 &&
