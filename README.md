@@ -1,5 +1,15 @@
 # React.js CRUD App with React.js & Axios
 
+- [React.js CRUD App with React.js & Axios](#reactjs-crud-app-with-reactjs--axios)
+  - [Project setup](#project-setup)
+    - [Set port](#set-port)
+    - [start the app](#start-the-app)
+  - [Http communication](#http-communication)
+    - [Axios library](#axios-library)
+  - [Project structure](#project-structure)
+  - [Security](#security)
+
+
 This web client app is designed to communicate with the Spring Boot web server app: [gitHub link](https://github.com/pesekt1/SWC3-Web-Server)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
