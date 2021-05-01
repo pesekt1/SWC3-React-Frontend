@@ -23,10 +23,12 @@ export default class CustomersList extends Component {
   }
 
   retrieveCustomers() {
+    console.log(http.authHeader());
     http
       .get("/customers", { headers: http.authHeader() })
       .then((response) => {
         //this is the response from web server
+        console.log(response.status);
         this.setState({
           customers: response.data,
         });
@@ -50,6 +52,7 @@ export default class CustomersList extends Component {
       currentCustomer: customer,
       currentIndex: index,
     });
+    console.log(customer);
   }
 
   removeCustomer(id) {

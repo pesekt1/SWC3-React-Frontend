@@ -17,8 +17,8 @@ class App extends Component {
     this.logOut = this.logOut.bind(this);
 
     this.state = {
-      showModeratorBoard: false,
-      showAdminBoard: false,
+      //showModeratorBoard: false,
+      //showAdminBoard: false,
       currentUser: undefined,
     };
   }
@@ -29,8 +29,8 @@ class App extends Component {
     if (user) {
       this.setState({
         currentUser: user,
-        showModeratorBoard: user.roles.includes("ROLE_MODERATOR"),
-        showAdminBoard: user.roles.includes("ROLE_ADMIN"),
+        //showModeratorBoard: user.roles.includes("ROLE_MODERATOR"),
+        //showAdminBoard: user.roles.includes("ROLE_ADMIN"),
       });
     }
   }
@@ -39,8 +39,18 @@ class App extends Component {
     AuthService.logout();
   }
 
+  //the link will be accessible only for user with ADMIN role.
+  _onClick = (e) => {
+    console.log(this.state.currentUser);
+    if (!this.state.currentUser) {
+      e.preventDefault();
+    } else if (!this.state.currentUser.roles.includes("ROLE_ADMIN")) {
+      e.preventDefault();
+    }
+  };
+
   render() {
-    const { currentUser, showModeratorBoard, showAdminBoard } = this.state;
+    const { currentUser } = this.state;
 
     console.log(process.env.REACT_APP_NAME);
     return (
@@ -63,7 +73,11 @@ class App extends Component {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link to={"/customers"} className="nav-link">
+                <Link
+                  to={"/customers"}
+                  className="nav-link"
+                  onClick={(e) => this._onClick(e)}
+                >
                   Customers
                 </Link>
               </li>
