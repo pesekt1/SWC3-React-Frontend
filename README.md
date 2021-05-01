@@ -71,6 +71,24 @@ export default {
 };
 ```
 
+Example: get tutorials:
+
+```javascript
+  retrieveTutorials(currentPage) {
+    //axios.get("http://localhost:5557/api/tutorials?...")
+    http
+      .get("/tutorials?page=" + currentPage, {
+        headers: http.authHeader(),
+      })
+      .then((response) => {
+        //this is the response from web server
+        this.setState({
+          tutorials: response.data.tutorials,
+          currentPage: response.data.currentPage,
+          totalPages: response.data.totalPages,
+        });
+```
+
 ## Project structure
 
 Render the App component in the placeholder called "root" in the index.html:
@@ -96,3 +114,68 @@ public/index.html:
 App.js:
 
 - Defines the SPA components -single page application components that are being changed dynamically.
+
+## Security
+
+Registration and login:
+
+- auth.service.js:
+
+  - login: Sending credentials to the login endpoint on the web server. If there is a JWT (Json Web Token) in the response, save it in browser's local storage.
+
+    ```javascript
+    login(username, password) {
+        return http.post("auth/signin", {username,password})
+        .then((response) => {
+            if (response.data.accessToken) {
+            localStorage.setItem("user", JSON.stringify(response.data));
+            }
+            return response.data;
+        });
+    }
+    ```
+
+  - registration:
+
+    ```javascript
+    register(username, email, password) {
+        //return axios.post(API_URL + "signup", {
+        return http.post("auth/signup", {
+        username,
+        email,
+        password,
+        });
+    }
+    ```
+
+Note: Registration could be improved to automatically login if successful.
+
+Browser's LocalStorage:
+
+![LocalStorage](public/img/localStorage.png)
+
+This Json Web Token can now be used for all http requests - it can be simply taken from local storage and used in the http headers where the web server expects it:
+
+Example:
+
+```javascript
+  retrieveCustomers() {
+    http
+      .get("/customers", { headers: http.authHeader() )
+      .then((response) => {
+```
+
+authHeader() - Returns the Authorization key-value pair for the http header:
+
+```javascript
+export default function authHeader() {
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  if (user && user.accessToken) {
+    return { Authorization: "Bearer " + user.accessToken }; // for Spring Boot server
+    //return { 'x-access-token': user.accessToken }; // for Node.js Express server
+  } else {
+    return {};
+  }
+}
+```
