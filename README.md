@@ -58,7 +58,7 @@ axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 axios.interceptors.response.use(null, (error) => {
   console.log("interceptor called");
   if (error.response.status === 401) {
-    console.log("Unauthorized access");
+  console.log(error.response.data);
   }
   const expectedError =
     error.response &&
