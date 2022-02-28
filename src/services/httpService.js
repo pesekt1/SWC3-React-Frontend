@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import authHeader from "./auth-header";
 
 //set default baseURL so when we use http request this will be add in front
-//example: http.get("/users") will be http.get("http://localhost:3900/api/users") in development env
+//example: http.get("/users") will be http.get("http://localhost:5777/api/users") in development env
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 axios.interceptors.response.use(null, (error) => {

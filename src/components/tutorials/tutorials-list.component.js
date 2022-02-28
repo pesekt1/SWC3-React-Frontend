@@ -53,7 +53,7 @@ export default class TutorialsList extends Component {
           currentPage: response.data.currentPage,
           totalPages: response.data.totalPages,
         });
-        console.log(response.data); //print in console, just for testing
+        console.log(response); //print in console, just for testing
       })
       .catch((e) => {
         console.log(e);
@@ -113,12 +113,8 @@ export default class TutorialsList extends Component {
   }
 
   render() {
-    const {
-      searchTitle,
-      tutorials,
-      currentTutorial,
-      currentIndex,
-    } = this.state;
+    const { searchTitle, tutorials, currentTutorial, currentIndex } =
+      this.state;
 
     return (
       <div className="list row">
